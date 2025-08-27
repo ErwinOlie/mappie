@@ -46,6 +46,16 @@ fun IrSimpleFunction.isMappieMapListFunction() =
         && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isList() == true
         && returnType.isList()
 
+fun IrSimpleFunction.isMappieMapNullableArrayFunction() =
+    name == IDENTIFIER_MAP_NULLABLE_ARRAY
+        && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isArray() == true
+        && returnType.isArray()
+
+fun IrSimpleFunction.isMappieMapArrayFunction() =
+    name == IDENTIFIER_MAP_ARRAY
+        && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isArray() == true
+        && returnType.isArray()
+
 fun IrSimpleFunction.isMappieMapNullableSetFunction() =
     name == IDENTIFIER_MAP_NULLABLE_SET
         && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isSet() == true

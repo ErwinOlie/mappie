@@ -109,13 +109,13 @@ private class MapperReferenceCollector(private val context: ResolverContext)
         require(expression.origin == IrStatementOrigin.GET_PROPERTY)
 
         return when (val name = expression.symbol.owner.name) {
-            getterName("forList"), getterName("forSet") -> {
+            getterName("forList"), getterName("forSet"), getterName("forArray") -> {
                 val mapper = expression.symbol.owner.parent as IrClass
                 PropertyMappingViaMapperTransformation(MappieDefinition(mapper), expression.dispatchReceiver!!)
             }
             else -> {
                 context.fail(
-                    "Unexpected call of ${name.asString()}, expected forList or forSet",
+                    "Unexpected call of ${name.asString()}, expected forList, forSet or forArray",
                     expression,
                     location(context.origin.fileEntry, expression)
                 )
