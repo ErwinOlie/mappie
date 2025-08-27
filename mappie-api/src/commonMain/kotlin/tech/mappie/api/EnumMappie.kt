@@ -55,6 +55,18 @@ public abstract class EnumMappie<FROM: Enum<*>, TO> : Mappie<TO> {
         HashSet<TO>(from.size).apply { from.forEach { add(map(it)) } }
 
     /**
+     * Map each element in [from] to an instance of [TO].
+     *
+     * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    @Suppress("UNCHECKED_CAST")
+    public open fun mapArray(from: Array<FROM>): Array<TO> =
+        arrayOfNulls<Any?>(from.size).apply {
+            from.forEachIndexed { index, value -> this[index] = map(value) }
+        } as Array<TO>
+
+    /**
      * Mapping function which instructs Mappie to generate code for this implementation.
      *
      * @param builder the configuration for the generation of this mapping.

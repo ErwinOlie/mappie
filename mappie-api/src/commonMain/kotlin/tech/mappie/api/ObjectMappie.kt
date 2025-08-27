@@ -32,6 +32,12 @@ public abstract class ObjectMappie<FROM, out TO> : Mappie<TO> {
         error("The mapper forSet should only be used in the context of 'via'. Use mapSet instead.")
 
     /**
+     * A mapper for [Array] to be used in [TransformableValue.via].
+     */
+    public val forArray: ArrayMappie<TO> get() =
+        error("The mapper forArray should only be used in the context of 'via'. Use mapArray instead.")
+
+    /**
      * Map [from] to an instance of [TO].
      *
      * @param from the source value.
@@ -65,6 +71,32 @@ public abstract class ObjectMappie<FROM, out TO> : Mappie<TO> {
      */
     public open fun mapNullableList(from: List<FROM>?): List<TO>? =
         from?.let { ArrayList<TO>(it.size).apply { it.forEach { add(map(it)) } } }
+
+    /**
+     * Map each element in [from] to an instance of [TO].
+     *
+     * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    @Suppress("UNCHECKED_CAST")
+    public open fun mapArray(from: Array<FROM>): Array<TO> =
+        arrayOfNulls<Any?>(from.size).apply {
+            from.forEachIndexed { index, value -> this[index] = map(value) }
+        } as Array<TO>
+
+    /**
+     * Map each element in [from] to an instance of [TO] if [from] is not null.
+     *
+     * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    @Suppress("UNCHECKED_CAST")
+    public open fun mapNullableArray(from: Array<FROM>?): Array<TO>? =
+        from?.let {
+            arrayOfNulls<Any?>(it.size).apply {
+                it.forEachIndexed { index, value -> this[index] = map(value) }
+            } as Array<TO>
+        }
 
     /**
      * Map each element in [from] to an instance of [TO].

@@ -13,6 +13,7 @@ import tech.mappie.ir.analysis.ValidationContext
 import tech.mappie.ir.reporting.pretty
 import tech.mappie.ir.util.isList
 import tech.mappie.ir.util.isSet
+import tech.mappie.ir.util.isArray
 
 class UnsafeTypeAssignmentProblems(
     private val context: ValidationContext,
@@ -80,6 +81,8 @@ class UnsafeTypeAssignmentProblems(
                 || ((source.type.isNullable() && !source.type.hasFlexibleNullabilityAnnotation()) && !target.type.isNullable())
 
         private fun isCompatibleCollection(source: ClassMappingSource, target: ClassMappingTarget): Boolean =
-            source.type.isList() && target.type.isList() || source.type.isSet() && target.type.isSet()
+            source.type.isList() && target.type.isList() ||
+            source.type.isSet() && target.type.isSet() ||
+            source.type.isArray() && target.type.isArray()
     }
 }
