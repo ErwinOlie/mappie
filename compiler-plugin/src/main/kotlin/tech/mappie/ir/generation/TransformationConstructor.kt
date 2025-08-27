@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.ir.builders.*
 import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.expressions.IrExpression
 import org.jetbrains.kotlin.ir.util.*
+import org.jetbrains.kotlin.ir.types.isArray
 import tech.mappie.exceptions.MappiePanicException.Companion.panic
 import tech.mappie.referenceFunctionLet
 import tech.mappie.ir.resolving.classes.sources.GeneratedViaMapperTransformation
@@ -37,6 +38,8 @@ fun IrBuilderWithScope.constructTransformation(context: CodeGenerationContext, t
 
 private fun PropertyMappingViaMapperTransformation.selectTransformationFunction(value: IrExpression) =
     when {
+        value.type.isArray() && value.type.isNullable() -> mapper.referenceMapNullableArrayFunction()
+        value.type.isArray() -> mapper.referenceMapArrayFunction()
         value.type.isList() && value.type.isNullable() -> mapper.referenceMapNullableListFunction()
         value.type.isList() -> mapper.referenceMapListFunction()
         value.type.isSet() && value.type.isNullable() -> mapper.referenceMapNullableSetFunction()
@@ -47,6 +50,10 @@ private fun PropertyMappingViaMapperTransformation.selectTransformationFunction(
 
 private fun IrClass.selectTransformationFunction(value: IrExpression) =
     when {
+        value.type.isArray() && value.type.isNullable() ->
+            listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapNullableArrayFunction() } }
+        value.type.isArray() ->
+            listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapArrayFunction() } }
         value.type.isList() && value.type.isNullable() ->
             listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapNullableListFunction() } }
         value.type.isList() ->

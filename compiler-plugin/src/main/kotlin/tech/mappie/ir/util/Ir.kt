@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
 import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.types.defaultType
 import org.jetbrains.kotlin.ir.types.getClass
+import org.jetbrains.kotlin.ir.types.isArray
 import org.jetbrains.kotlin.ir.util.SYNTHETIC_OFFSET
 import org.jetbrains.kotlin.ir.util.isNullable
 import org.jetbrains.kotlin.ir.util.erasedUpperBound
@@ -55,6 +56,16 @@ fun IrSimpleFunction.isMappieMapSetFunction() =
     name == IDENTIFIER_MAP_SET
         && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isSet() == true
         && returnType.isSet()
+
+fun IrSimpleFunction.isMappieMapNullableArrayFunction() =
+    name == IDENTIFIER_MAP_NULLABLE_ARRAY
+        && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isArray() == true
+        && returnType.isArray()
+
+fun IrSimpleFunction.isMappieMapArrayFunction() =
+    name == IDENTIFIER_MAP_ARRAY
+        && parameters.singleOrNull { it.kind == IrParameterKind.Regular }?.type?.isArray() == true
+        && returnType.isArray()
 
 fun IrSimpleFunction.isMappieMapNullableFunction() =
     name == IDENTIFIER_MAP_NULLABLE

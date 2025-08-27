@@ -5,22 +5,23 @@ import org.jetbrains.kotlin.ir.types.*
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.ir.util.isNullable
 import org.jetbrains.kotlin.ir.util.isSubtypeOf
+import org.jetbrains.kotlin.ir.types.isArray
 
 import org.jetbrains.kotlin.name.StandardClassIds.Annotations.FlexibleNullability
 import tech.mappie.exceptions.MappiePanicException.Companion.panic
 import tech.mappie.ir.MappieIrRegistrar.Companion.context
 
 fun IrType.isMappableFrom(other: IrType): Boolean = when {
-    (isList() && other.isList()) || (isSet() && other.isSet()) ->
+    (isList() && other.isList()) || (isSet() && other.isSet()) || (isArray() && other.isArray()) ->
         (this as IrSimpleType).arguments.first().typeOrFail.isMappableFrom((other as IrSimpleType).arguments.first().typeOrFail)
-    (isList() xor other.isList()) || (isSet() xor other.isSet()) ->
+    (isList() xor other.isList()) || (isSet() xor other.isSet()) || (isArray() xor other.isArray()) ->
         false
     else ->
         isSubtypeOf(other, IrTypeSystemContextImpl(context.irBuiltIns))
 }
 
 fun IrType.mappieType() = when {
-    isList() || isSet() -> (this as IrSimpleType).arguments.first().typeOrFail
+    isList() || isSet() || isArray() -> (this as IrSimpleType).arguments.first().typeOrFail
     isNullable() -> this.makeNotNull()
     else -> this
 }

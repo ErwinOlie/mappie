@@ -14,6 +14,7 @@ import tech.mappie.ir.resolving.classes.targets.ClassMappingTarget
 import tech.mappie.ir.util.isList
 import tech.mappie.ir.util.isSet
 import tech.mappie.ir.util.mappieType
+import org.jetbrains.kotlin.ir.types.isArray
 
 sealed interface TransformableClassMappingSource : ClassMappingSource {
     val transformation: PropertyMappingTransformation?
@@ -30,6 +31,7 @@ sealed interface TransformableClassMappingSource : ClassMappingSource {
                     when {
                         original.isSet() -> context.irBuiltIns.setClass.typeWith(transformation.type)
                         original.isList() -> context.irBuiltIns.listClass.typeWith(transformation.type)
+                        original.isArray() -> context.irBuiltIns.arrayClass.typeWith(transformation.type)
                         else -> transformation.type
                     }.run { if (original.isNullable()) makeNullable() else this }.addAnnotations(original.annotations)
                 }

@@ -10,6 +10,10 @@ val IDENTIFIER_MAP = Name.identifier("map")
 
 val IDENTIFIER_MAP_NULLABLE = Name.identifier("mapNullable")
 
+val IDENTIFIER_MAP_NULLABLE_ARRAY = Name.identifier("mapNullableArray")
+
+val IDENTIFIER_MAP_ARRAY = Name.identifier("mapArray")
+
 val IDENTIFIER_MAP_NULLABLE_LIST = Name.identifier("mapNullableList")
 
 val IDENTIFIER_MAP_LIST = Name.identifier("mapList")
