@@ -13,6 +13,7 @@ import tech.mappie.ir.resolving.MappieDefinition
 import tech.mappie.ir.resolving.classes.targets.ClassMappingTarget
 import tech.mappie.ir.util.isList
 import tech.mappie.ir.util.isSet
+import tech.mappie.ir.util.isArray
 import tech.mappie.ir.util.mappieType
 
 sealed interface TransformableClassMappingSource : ClassMappingSource {
@@ -30,6 +31,7 @@ sealed interface TransformableClassMappingSource : ClassMappingSource {
                     when {
                         original.isSet() -> context.irBuiltIns.setClass.typeWith(transformation.type)
                         original.isList() -> context.irBuiltIns.listClass.typeWith(transformation.type)
+                        original.isArray() -> context.irBuiltIns.arrayClass.typeWith(transformation.type)
                         else -> transformation.type
                     }.run { if (original.isNullable()) makeNullable() else this }.addAnnotations(original.annotations)
                 }

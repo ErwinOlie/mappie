@@ -18,6 +18,10 @@ val IDENTIFIER_MAP_NULLABLE_SET = Name.identifier("mapNullableSet")
 
 val IDENTIFIER_MAP_SET = Name.identifier("mapSet")
 
+val IDENTIFIER_MAP_NULLABLE_ARRAY = Name.identifier("mapNullableArray")
+
+val IDENTIFIER_MAP_ARRAY = Name.identifier("mapArray")
+
 val IDENTIFIER_FROM_ENUM_ENTRY = Name.identifier("fromEnumEntry")
 
 val IDENTIFIER_THROWN_BY_ENUM_ENTRY = Name.identifier("thrownByEnumEntry")

@@ -32,6 +32,12 @@ public abstract class ObjectMappie<FROM, out TO> : Mappie<TO> {
         error("The mapper forSet should only be used in the context of 'via'. Use mapSet instead.")
 
     /**
+     * A mapper for [Array] to be used in [TransformableValue.via].
+     */
+    public val forArray: ArrayMappie<TO> get() =
+        error("The mapper forArray should only be used in the context of 'via'. Use mapArray instead.")
+
+    /**
      * Map [from] to an instance of [TO].
      *
      * @param from the source value.
@@ -83,6 +89,24 @@ public abstract class ObjectMappie<FROM, out TO> : Mappie<TO> {
      */
     public open fun mapNullableSet(from: Set<FROM>?): Set<TO>? =
         from?.let { HashSet<TO>(it.size).apply { from.forEach { add(map(it)) } } }
+
+    /**
+     * Map each element in [from] to an instance of [TO].
+     *
+     * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    public open fun mapArray(from: Array<FROM>): Array<TO> =
+        Array(from.size) { index -> map(from[index]) }
+
+    /**
+     * Map each element in [from] to an instance of [TO] if [from] is not null.
+     *
+     * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    public open fun mapNullableArray(from: Array<FROM>?): Array<TO>? =
+        from?.let { Array(it.size) { index -> map(it[index]) } }
 
     /**
      * Mapping function which instructs Mappie to generate code for this implementation.
