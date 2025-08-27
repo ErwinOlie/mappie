@@ -40,6 +40,15 @@ public abstract class EnumMappie<FROM: Enum<*>, TO> : Mappie<TO> {
      * Map each element in [from] to an instance of [TO].
      *
      * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    public open fun mapArray(from: Array<FROM>): Array<TO> =
+        ArrayList<TO>(from.size).apply { from.forEach { add(map(it)) } }.toTypedArray()
+
+    /**
+     * Map each element in [from] to an instance of [TO].
+     *
+     * @param from the source values.
      * @return [from] mapped to a list of instances of [TO].
      */
     public open fun mapList(from: List<FROM>): List<TO> =

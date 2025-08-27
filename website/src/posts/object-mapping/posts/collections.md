@@ -1,20 +1,20 @@
 ---
-title: "Lists & Sets"
+title: "Lists, Sets & Arrays"
 summary: "Resolving source- and target properties."
 eleventyNavigation:
-  key: Lists & Sets
+  key: Lists, Sets & Arrays
   parent: Object Mapping
   order: 10
 ---
 
-All mappers of Mappie define mapper variants for collections. Specifically, for `List` and `Set`. When we want to map a 
-property of such a type, we do not want to copy the collection itself, but the elements contained in such a type. 
+All mappers of Mappie define mapper variants for collections. Specifically, for `Array`, `List` and `Set`. When we want to map a
+property of such a type, we do not want to copy the collection itself, but the elements contained in such a type.
 
-Mappie automatically detects if the property is a (nullable) collection, and will automatically select the correct mapping 
-function to be used. 
+Mappie automatically detects if the property is a (nullable) collection, and will automatically select the correct mapping
+function to be used.
 
-We can also explicitly reference a mapper using the getters `forList` and `forSet` defined 
-in each mapper. 
+We can also explicitly reference a mapper using the getters `forArray`, `forList` and `forSet` defined
+in each mapper.
 
 For example, suppose we have the data class `Book` containing a list of `Page`
 ```kotlin

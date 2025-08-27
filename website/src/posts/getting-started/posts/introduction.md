@@ -43,7 +43,7 @@ object PersonMapper : ObjectMappie<Person, PersonDto>() {
 }
 ```
 
-We can then use `PersonMapper` by calling it's `map`, `mapList` or `mapSet` function
+We can then use `PersonMapper` by calling it's `map`, `mapArray`, `mapList` or `mapSet` function
 ```kotlin
 val personDto = PersonMapper.map(Person("Sjon", 58, Gender.MALE))
 ```
