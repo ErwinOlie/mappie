@@ -11,16 +11,16 @@ import tech.mappie.exceptions.MappiePanicException.Companion.panic
 import tech.mappie.ir.MappieIrRegistrar.Companion.context
 
 fun IrType.isMappableFrom(other: IrType): Boolean = when {
-    (isList() && other.isList()) || (isSet() && other.isSet()) ->
+    (isList() && other.isList()) || (isSet() && other.isSet()) || (isArray() && other.isArray()) ->
         (this as IrSimpleType).arguments.first().typeOrFail.isMappableFrom((other as IrSimpleType).arguments.first().typeOrFail)
-    (isList() xor other.isList()) || (isSet() xor other.isSet()) ->
+    (isList() xor other.isList()) || (isSet() xor other.isSet()) || (isArray() xor other.isArray()) ->
         false
     else ->
         isSubtypeOf(other, IrTypeSystemContextImpl(context.irBuiltIns))
 }
 
 fun IrType.mappieType() = when {
-    isList() || isSet() -> (this as IrSimpleType).arguments.first().typeOrFail
+    isList() || isSet() || isArray() -> (this as IrSimpleType).arguments.first().typeOrFail
     isNullable() -> this.makeNotNull()
     else -> this
 }
@@ -36,6 +36,9 @@ fun IrType.isSet() =
         "kotlin.collections.Set",
         "kotlin.collections.MutableSet",
     )
+
+fun IrType.isArray() =
+    classOrNull?.owner?.fqNameWhenAvailable?.asString() == "kotlin.Array"
 
 fun IrType.hasFlexibleNullabilityAnnotation(): Boolean =
     annotations.any { it.symbol.owner.parentAsClass.classId == FlexibleNullability }

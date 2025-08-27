@@ -14,6 +14,8 @@ data class MappieDefinition(
     fun referenceMapListFunction() = clazz.functions.first { it.isMappieMapListFunction() }
     fun referenceMapNullableSetFunction() = clazz.functions.first { it.isMappieMapNullableSetFunction() }
     fun referenceMapSetFunction() = clazz.functions.first { it.isMappieMapSetFunction() }
+    fun referenceMapNullableArrayFunction() = clazz.functions.first { it.isMappieMapNullableArrayFunction() }
+    fun referenceMapArrayFunction() = clazz.functions.first { it.isMappieMapArrayFunction() }
     fun referenceMapNullableFunction() = clazz.functions.first { it.isMappieMapNullableFunction() }
     fun referenceMapFunction() = clazz.functions.first { it.isMappieMapFunction() }
 }
@@ -21,12 +23,12 @@ data class MappieDefinition(
 fun List<MappieDefinition>.matching(source: IrType, target: IrType) =
     filter {
         when {
-            (source.isList() && target.isList()) || (source.isSet() && target.isSet()) -> {
+            (source.isList() && target.isList()) || (source.isSet() && target.isSet()) || (source.isArray() && target.isArray()) -> {
                 val source = (source as IrSimpleType).arguments.first().typeOrFail
                 val target = (target as IrSimpleType).arguments.first().typeOrFail
                 it.source.isMappableFrom(source) && target.isMappableFrom(it.target.makeNullable())
             }
-            (source.isList() xor target.isList()) || (source.isSet() xor target.isSet()) -> {
+            (source.isList() xor target.isList()) || (source.isSet() xor target.isSet()) || (source.isArray() xor target.isArray()) -> {
                 false
             }
             else -> {

@@ -55,6 +55,15 @@ public abstract class EnumMappie<FROM: Enum<*>, TO> : Mappie<TO> {
         HashSet<TO>(from.size).apply { from.forEach { add(map(it)) } }
 
     /**
+     * Map each element in [from] to an instance of [TO].
+     *
+     * @param from the source values.
+     * @return [from] mapped to an array of instances of [TO].
+     */
+    public open fun mapArray(from: Array<FROM>): Array<TO> =
+        Array(from.size) { index -> map(from[index]) }
+
+    /**
      * Mapping function which instructs Mappie to generate code for this implementation.
      *
      * @param builder the configuration for the generation of this mapping.

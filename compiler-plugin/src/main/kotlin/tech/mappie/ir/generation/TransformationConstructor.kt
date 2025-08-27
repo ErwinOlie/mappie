@@ -41,6 +41,8 @@ private fun PropertyMappingViaMapperTransformation.selectTransformationFunction(
         value.type.isList() -> mapper.referenceMapListFunction()
         value.type.isSet() && value.type.isNullable() -> mapper.referenceMapNullableSetFunction()
         value.type.isSet() -> mapper.referenceMapSetFunction()
+        value.type.isArray() && value.type.isNullable() -> mapper.referenceMapNullableArrayFunction()
+        value.type.isArray() -> mapper.referenceMapArrayFunction()
         value.type.isNullable() -> mapper.referenceMapNullableFunction()
         else -> mapper.referenceMapFunction()
     }
@@ -55,6 +57,10 @@ private fun IrClass.selectTransformationFunction(value: IrExpression) =
             listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapNullableSetFunction() } }
         value.type.isSet() ->
             listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapSetFunction() } }
+        value.type.isArray() && value.type.isNullable() ->
+            listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapNullableArrayFunction() } }
+        value.type.isArray() ->
+            listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapArrayFunction() } }
         value.type.isNullable() ->
             listOf(this, superClass!!).firstNotNullOf { it.functions.firstOrNull { it.isMappieMapNullableFunction() } }
         else -> functions.first { it.isMappieMapFunction() }
